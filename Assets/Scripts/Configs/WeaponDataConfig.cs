@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponDataConfig", menuName = "Game/WeaponDataConfig")]
 public class WeaponDataConfig : ScriptableObject
 {
+    [Header("Data")]
     [SerializeField] private string _name;
     [SerializeField, Range(2, 50)] private int _damage;
     [SerializeField, Range(1, 50)] private int _maxAmmoCapacity;

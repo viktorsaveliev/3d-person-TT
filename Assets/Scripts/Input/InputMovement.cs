@@ -5,7 +5,7 @@ using Zenject;
 [RequireComponent(typeof(Unit))]
 public class InputMovement : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Transform _unitTransform;
 
     private Unit _unit;
     private IInputMode _inputMode;
@@ -48,19 +48,21 @@ public class InputMovement : MonoBehaviour
         if (moveDirection.x != 0 || moveDirection.z != 0)
         {
             Vector3 cameraForward = _camera.transform.forward;
-            cameraForward.y = 0f;
-            cameraForward.Normalize();
+            if (!_isAiming)
+            {
+                cameraForward.y = 0;
+            }
 
             Quaternion cameraRotation = Quaternion.LookRotation(cameraForward);
-            _unit.transform.rotation = cameraRotation;
+            _unitTransform.rotation = cameraRotation;
 
             Vector3 finalMoveDirection = cameraForward * moveDirection.z + _camera.transform.right * moveDirection.x;
             _rigidbody.velocity = finalMoveDirection * _currentSpeed;
-            _animator.SetFloat(_stringBus.ANIM_MOVE, _rigidbody.velocity.magnitude);
+            _unit.Animator.SetFloat(_stringBus.ANIM_MOVE, _rigidbody.velocity.magnitude);
         }
         else
         {
-            _animator.SetFloat(_stringBus.ANIM_MOVE, 0);
+            _unit.Animator.SetFloat(_stringBus.ANIM_MOVE, 0);
         }
     }
 
@@ -68,9 +70,7 @@ public class InputMovement : MonoBehaviour
     {
         if (!_isAiming) return;
 
-        Vector3 cameraForward = _camera.transform.forward;
-        Quaternion cameraRotation = Quaternion.LookRotation(cameraForward);
-        _unit.transform.rotation = cameraRotation;
+        _unitTransform.rotation = GetCameraLookRotation();
     }
 
     private void Sprint(bool isSprinting)
@@ -79,7 +79,7 @@ public class InputMovement : MonoBehaviour
 
         _isSprinting = isSprinting;
         _currentSpeed = isSprinting ? _unit.Data.SprintSpeed : _unit.Data.RegularSpeed;
-        _animator.SetBool(_stringBus.ANIM_SPRINT, isSprinting);
+        _unit.Animator.SetBool(_stringBus.ANIM_SPRINT, isSprinting);
     }
 
     private void Aim(bool isAiming)
@@ -91,11 +91,17 @@ public class InputMovement : MonoBehaviour
 
         if (!isAiming)
         {
-            Quaternion rotation = Quaternion.Euler(0, _unit.transform.rotation.eulerAngles.y, _unit.transform.rotation.eulerAngles.z);
-            _unit.transform.DORotateQuaternion(rotation, 0.5f);
+            Quaternion rotation = Quaternion.Euler(0, _unitTransform.rotation.eulerAngles.y, _unitTransform.rotation.eulerAngles.z);
+            _unitTransform.DORotateQuaternion(rotation, 0.5f);
         }
 
-        _animator.SetBool(_stringBus.ANIM_AIM, isAiming);
+        _unit.Animator.SetBool(_stringBus.ANIM_AIM_RIFLE, isAiming);
+    }
+
+    private Quaternion GetCameraLookRotation()
+    {
+        Vector3 cameraForward = _camera.transform.forward;
+        return Quaternion.LookRotation(cameraForward);
     }
 
     [Inject]

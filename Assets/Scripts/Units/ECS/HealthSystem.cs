@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class HealthSystem : IUnitSystem
 {
@@ -7,13 +8,16 @@ public class HealthSystem : IUnitSystem
 
     private int _health;
     private int _maxHealth;
+    private Vector3 _lastHitPosition;
 
     public int Health => _health;
     public int MaxHealth => _maxHealth;
+    public Vector3 LastHitPosition => _lastHitPosition;
 
     public HealthSystem(int maxHealth)
     {
         _maxHealth = maxHealth;
+        _health = maxHealth;
     }
 
     public void SetHealth(int health)
@@ -36,8 +40,9 @@ public class HealthSystem : IUnitSystem
         _maxHealth = health;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(Vector3 hitPosition, int damage)
     {
+        _lastHitPosition = hitPosition;
         _health -= damage;
 
         if (_health <= 0)

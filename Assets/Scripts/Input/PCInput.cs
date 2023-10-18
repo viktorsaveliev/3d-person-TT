@@ -7,6 +7,7 @@ public class PCInput : IInputMode
 
     public event Action<Vector3> OnMove;
 
+    public event Action OnReloadWeapon;
     public event Action OnShot;
 
     public event Action<bool> OnAimed;
@@ -32,7 +33,12 @@ public class PCInput : IInputMode
             OnSprint?.Invoke(false);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            OnReloadWeapon?.Invoke();
+        }
+
+        if (Input.GetMouseButton(0))
         {
             OnShot?.Invoke();
         }

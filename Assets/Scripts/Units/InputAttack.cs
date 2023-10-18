@@ -13,11 +13,17 @@ public class InputAttack
     public void Init()
     {
         _inputMode.OnShot += OnShot;
+        _inputMode.OnReloadWeapon += OnReload;
     }
 
     private void OnShot()
     {
-        if (_weaponSystem == null) return;
+        if (_weaponSystem == null || _weaponSystem.CurrentWeapon == null) return;
         _weaponSystem.Shot();
+    }
+
+    private void OnReload()
+    {
+        _weaponSystem.CurrentWeapon.StartReloading();
     }
 }

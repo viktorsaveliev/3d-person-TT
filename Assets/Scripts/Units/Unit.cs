@@ -4,20 +4,20 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
-    [SerializeField] protected UnitDataConfig _config;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private UnitDataConfig _config;
 
     private readonly List<IUnitSystem> _systems = new();
 
-    private HealthSystem _health;
-
     public UnitDataConfig Data => _config;
+    public Animator Animator => _animator;
 
     public virtual void Init()
     {
-        _health = new HealthSystem(_config.Health);
-        _health.OnDead += OnDead;
+        HealthSystem health = new(_config.Health);
+        health.OnDead += OnDead;
 
-        AddSystem(_health);
+        AddSystem(health);
     }
     
     public void AddSystem(IUnitSystem system)
@@ -35,8 +35,9 @@ public abstract class Unit : MonoBehaviour
         return _systems.OfType<T>().FirstOrDefault();
     }
 
-    private void OnDead()
+    protected virtual void OnDead()
     {
-        gameObject.SetActive(false);
+        StringBus stringBus = new();
+        _animator.SetTrigger(stringBus.ANIM_DEATH_2);
     }
 }

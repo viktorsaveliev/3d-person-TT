@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: M4A1
   _damage: 20
-  _maxAmmoCapacity: 5
+  _maxAmmoCapacity: 30
   _reloadTime: 2
   _delayBetweenShoots: 0.2
   _fireRange: 100

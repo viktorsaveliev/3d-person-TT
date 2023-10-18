@@ -4,6 +4,7 @@ using Zenject;
 public class UserCharacter : Unit
 {
     [SerializeField] private Weapon _weapon;
+    
     private IInputMode _inputMode;
 
     private void Awake()
@@ -16,11 +17,18 @@ public class UserCharacter : Unit
         base.Init();
 
         WeaponSystem weaponSystem = new();
-        AddSystem(weaponSystem);
         weaponSystem.EquipWeapon(_weapon);
+        weaponSystem.OnWeaponReloadStateChanged += OnWeaponReloadStateChanged;
+        AddSystem(weaponSystem);
 
         InputAttack inputAttack = new(_inputMode, weaponSystem);
         inputAttack.Init();
+    }
+
+    private void OnWeaponReloadStateChanged(bool isReloading)
+    {
+        StringBus stringBus = new();
+        Animator.SetBool(stringBus.ANIM_RELOAD_RIFLE, isReloading);
     }
 
     [Inject]

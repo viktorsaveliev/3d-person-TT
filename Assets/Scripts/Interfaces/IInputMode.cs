@@ -7,6 +7,7 @@ public interface IInputMode
 
     public event Action<Vector3> OnMove;
 
+    public event Action OnReloadWeapon;
     public event Action OnShot;
 
     public event Action<bool> OnAimed;
