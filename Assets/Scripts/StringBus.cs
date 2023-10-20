@@ -8,4 +8,5 @@ public class StringBus
     public readonly string ANIM_SPRINT = "Sprint";
     public readonly string ANIM_RELOAD_RIFLE = "Reload";
     public readonly string ANIM_ATTACK_HANDS = "Attack";
+    public readonly string ANIM_WITH_RIFLE = "WithRifle";
 }

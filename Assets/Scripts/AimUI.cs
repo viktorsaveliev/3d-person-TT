@@ -50,27 +50,33 @@ public class AimUI : MonoBehaviour
     private void Show()
     {
         _currentWeapon = _userUnit.GetSystem<WeaponSystem>()?.CurrentWeapon;
-        _currentWeapon.OnReloadStateChanged += OnReload;
+        if (_currentWeapon != null)
+        {
+            _currentWeapon.OnReloadStateChanged += OnReload;
 
-        _gunName.text = $"{_currentWeapon.Data.Name}";
-        _aimObject.SetActive(true);
-        
-        UpdateAmmo();
+            _gunName.text = $"{_currentWeapon.ItemData.Name}";
+            _aimObject.SetActive(true);
+
+            UpdateAmmo();
+        }
     }
 
     private void Hide()
     {
-        _currentWeapon.OnReloadStateChanged -= OnReload;
-        _aimObject.SetActive(false);
+        if (_currentWeapon != null)
+        {
+            _currentWeapon.OnReloadStateChanged -= OnReload;
+            _aimObject.SetActive(false);
+        }
     }
 
     private void UpdateAmmo()
     {
         if (_currentWeapon != null)
         {
-            _ammo.text = $"{_currentWeapon.CurrentAmmo} / {_currentWeapon.Data.MaxAmmo}";
+            _ammo.text = $"{_currentWeapon.CurrentAmmo} / {_currentWeapon.WeaponData.MaxAmmo}";
 
-            float percentage = (float)(_currentWeapon.CurrentAmmo - 1) / (_currentWeapon.Data.MaxAmmo - 1);
+            float percentage = (float)(_currentWeapon.CurrentAmmo - 1) / (_currentWeapon.WeaponData.MaxAmmo - 1);
             _healthProgressBar.fillAmount = percentage;
         }
     }
@@ -83,7 +89,7 @@ public class AimUI : MonoBehaviour
         }
         else
         {
-            _healthProgressBar.DOFillAmount(1f, _currentWeapon.Data.ReloadTime);
+            _healthProgressBar.DOFillAmount(1f, _currentWeapon.WeaponData.ReloadTime);
         }
     }
 

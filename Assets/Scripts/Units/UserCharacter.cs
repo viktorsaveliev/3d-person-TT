@@ -3,8 +3,8 @@ using Zenject;
 
 public class UserCharacter : Unit
 {
-    [SerializeField] private Weapon _weapon;
-    
+    [SerializeField] private Transform _weaponContainer;
+
     private IInputMode _inputMode;
 
     private void Awake()
@@ -16,9 +16,11 @@ public class UserCharacter : Unit
     {
         base.Init();
 
-        WeaponSystem weaponSystem = new();
-        weaponSystem.EquipWeapon(_weapon);
+        WeaponSystem weaponSystem = new(_weaponContainer);
+        weaponSystem.OnEquipWeapon += OnEquipWeapon;
+        weaponSystem.OnHideWeapon += OnHideWeapon;
         weaponSystem.OnWeaponReloadStateChanged += OnWeaponReloadStateChanged;
+
         AddSystem(weaponSystem);
 
         InputAttack inputAttack = new(_inputMode, weaponSystem);
@@ -29,6 +31,18 @@ public class UserCharacter : Unit
     {
         StringBus stringBus = new();
         Animator.SetBool(stringBus.ANIM_RELOAD_RIFLE, isReloading);
+    }
+
+    private void OnEquipWeapon()
+    {
+        StringBus stringBus = new();
+        Animator.SetBool(stringBus.ANIM_WITH_RIFLE, true);
+    }
+
+    private void OnHideWeapon()
+    {
+        StringBus stringBus = new();
+        Animator.SetBool(stringBus.ANIM_WITH_RIFLE, false);
     }
 
     [Inject]

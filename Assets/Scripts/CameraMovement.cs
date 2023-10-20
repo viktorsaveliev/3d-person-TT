@@ -11,18 +11,29 @@ public class CameraMovement : MonoBehaviour
     private readonly Vector3 _aimOffset = new (0.5f, 0.4f, -0.5f);
 
     private Vector3 _currentOffset;
-    private Vector3 _shakeOffset;
 
+    // === для плавного перехода
+    private Vector3 _startOffset; 
+
+    private readonly float _transitionDuration = 0.2f;
+    private float _transitionTime = 0f;
+    // ===
+
+    private Vector3 _shakeOffset;
     private readonly float _shakeSensitivity = 0.004f;
+
     private readonly float _sensitivity = 3;
     private readonly float _limitRotateX = 25;
     private float _rotationX, _rotationY;
 
     private bool _isAiming;
 
+    private bool IsRotateActive => !Cursor.visible;
+
     private void Awake()
     {
         _currentOffset = _regularOffset;
+        _transitionTime = _transitionDuration;
         transform.position = _cameraTarget.position + _currentOffset;
     }
 
@@ -42,11 +53,17 @@ public class CameraMovement : MonoBehaviour
 
     private void Rotate(float mouseX, float mouseY)
     {
+        if (!IsRotateActive) return;
+
         _rotationX = transform.localEulerAngles.y + mouseX * _sensitivity;
         _rotationY += mouseY * _sensitivity;
         _rotationY = Mathf.Clamp(_rotationY, -_limitRotateX, _limitRotateX);
 
-        
+        if (_transitionTime < _transitionDuration)
+        {
+            _currentOffset = Vector3.Lerp(_startOffset, _isAiming ? _aimOffset : _regularOffset, _transitionTime / _transitionDuration);
+            _transitionTime += Time.deltaTime;
+        }
 
         if (_isAiming)
         {
@@ -63,8 +80,11 @@ public class CameraMovement : MonoBehaviour
 
     private void Aim(bool isAiming)
     {
+        _startOffset = _currentOffset;
+        _transitionTime = 0f;
+
         _isAiming = isAiming;
-        _currentOffset = isAiming? _aimOffset : _regularOffset;
+        _currentOffset = isAiming ? _aimOffset : _regularOffset;
     }
 
     private void OnPlayerShot()

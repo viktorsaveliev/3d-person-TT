@@ -1,10 +1,8 @@
-using UnityEngine;
 
 public class M4A1 : Weapon
 {
-    protected override void Shot()
+    public override void Use()
     {
-        base.Shot();
-
+        throw new System.NotImplementedException();
     }
 }

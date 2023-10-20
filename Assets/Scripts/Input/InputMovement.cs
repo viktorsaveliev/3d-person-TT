@@ -48,16 +48,17 @@ public class InputMovement : MonoBehaviour
         if (moveDirection.x != 0 || moveDirection.z != 0)
         {
             Vector3 cameraForward = _camera.transform.forward;
-            if (!_isAiming)
-            {
-                cameraForward.y = 0;
-            }
-
-            Quaternion cameraRotation = Quaternion.LookRotation(cameraForward);
-            _unitTransform.rotation = cameraRotation;
+            cameraForward.y = 0;
 
             Vector3 finalMoveDirection = cameraForward * moveDirection.z + _camera.transform.right * moveDirection.x;
-            _rigidbody.velocity = finalMoveDirection * _currentSpeed;
+
+            if (!_isAiming)
+            {
+                Quaternion desiredRotation = Quaternion.LookRotation(finalMoveDirection);
+                _unitTransform.rotation = desiredRotation;
+            }
+
+            _rigidbody.velocity = finalMoveDirection.normalized * _currentSpeed;
             _unit.Animator.SetFloat(_stringBus.ANIM_MOVE, _rigidbody.velocity.magnitude);
         }
         else
