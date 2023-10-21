@@ -14,18 +14,3 @@ public class ItemDataConfig : ScriptableObject
     public string Description => _description;
     public int Amount => _amount;
 }
-
-[CustomEditor(typeof(ItemDataConfig))]
-public class ItemDataConfigSaver : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        ItemDataConfig scriptableObject = (ItemDataConfig)target;
-        if (GUILayout.Button("Save"))
-        {
-            EditorUtility.SetDirty(scriptableObject);
-        }
-    }
-}

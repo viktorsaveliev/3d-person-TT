@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,6 +34,12 @@ public abstract class Unit : MonoBehaviour
     public T GetSystem<T>() where T : IUnitSystem
     {
         return _systems.OfType<T>().FirstOrDefault();
+    }
+
+    public virtual void OnSpawn()
+    {
+        AISystem ai = GetSystem<AISystem>();
+        ai?.Walk();
     }
 
     protected virtual void OnDead()

@@ -29,7 +29,6 @@ public class WeaponSystem : IUnitSystem
         }
 
         _currentWeapon = weapon;
-        _currentWeapon.Init();
 
         _currentWeapon.OnReloadStateChanged += OnRealod;
         _currentWeapon.transform.parent = _weaponContainer;

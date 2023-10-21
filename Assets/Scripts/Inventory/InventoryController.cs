@@ -24,6 +24,8 @@ public class InventoryController : MonoBehaviour
     {
         _inventory = new(_config.SlotsCapacity);
         _view = GetComponent<InventoryView>();
+        _view.Init(_inventory);
+
         CreateSlots();
     }
 

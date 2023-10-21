@@ -6,11 +6,6 @@ public class Zombie : Unit
     private HealthSystem _health;
     private Rigidbody _rigidbody;
 
-    private void Awake()
-    {
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();
@@ -39,5 +34,10 @@ public class Zombie : Unit
         base.OnDead();
         _rigidbody.constraints = RigidbodyConstraints.None;
         GetSystem<AISystem>().CurrentState.Exit();
+    }
+
+    private void AttackTarget() // Animation event
+    {
+        GetSystem<AISystem>()?.AttackTarget();
     }
 }

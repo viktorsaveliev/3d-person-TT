@@ -55,6 +55,13 @@ public class Inventory
         _slots[slot].CurrentItem.Use();
     }
 
+    public void UnselectSlot()
+    {
+        if (_selectedSlot == null) return;
+        OnUnselectSlot?.Invoke(_selectedSlot);
+        _selectedSlot = null;
+    }
+
     private void OnClickSlot(InventorySlot slot)
     {
         if (_selectedSlot != null)

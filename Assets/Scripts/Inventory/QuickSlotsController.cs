@@ -1,21 +1,18 @@
-using UnityEngine;
+using System;
 using Zenject;
 
-public class QuickSlotsController : MonoBehaviour
+public class QuickSlotsController
 {
+    public event Action OnWeaponChanged;
+
     private IInputMode _inputMode;
     private UserCharacter _user;
 
     private InventoryController _inventoryController;
 
-    private void OnEnable()
+    public void Init()
     {
         _inputMode.OnSelectWeapon += OnSelectSlot;
-    }
-
-    private void OnDisable()
-    {
-        _inputMode.OnSelectWeapon -= OnSelectSlot;
     }
 
     private void OnSelectSlot(int index)
@@ -26,6 +23,7 @@ public class QuickSlotsController : MonoBehaviour
         {
             WeaponSystem weaponSystem = _user.GetSystem<WeaponSystem>();
             weaponSystem?.EquipWeapon(weapon);
+            OnWeaponChanged?.Invoke();
         }
     }
 

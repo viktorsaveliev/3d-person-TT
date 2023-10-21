@@ -239,7 +239,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: e0f0abf1b49be9d4088939e12a785697, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -274,6 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageFX: {fileID: 4869217674015257673}
+  _isChangePositionFX: 1
 --- !u!54 &1195216171131425169
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -310,7 +311,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1093219839473476180}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.22
+  m_Radius: 0.83
   m_Speed: 0
   m_Acceleration: 20
   avoidancePriority: 50
@@ -322,7 +323,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: -0.13
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1261004807465314536
 GameObject:
   m_ObjectHideFlags: 0

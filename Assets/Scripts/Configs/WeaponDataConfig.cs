@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponDataConfig : ScriptableObject
 {
     [Header("Data")]
-    [SerializeField, Range(2, 50)] private int _damage;
+    [SerializeField, Range(2, 200)] private int _damage;
     [SerializeField, Range(1, 50)] private int _maxAmmoCapacity;
     [SerializeField, Range(1, 10)] private float _reloadTime;
     [SerializeField, Range(0.03f, 5)] private float _delayBetweenShoots;
@@ -16,19 +16,4 @@ public class WeaponDataConfig : ScriptableObject
     public float ReloadTime => _reloadTime;
     public float DelayBetweenShoots => _delayBetweenShoots;
     public float FireRange => _fireRange;
-}
-
-[CustomEditor(typeof(WeaponDataConfig))]
-public class WeaponDataConfigSaver : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        WeaponDataConfig scriptableObject = (WeaponDataConfig)target;
-        if (GUILayout.Button("Save"))
-        {
-            EditorUtility.SetDirty(scriptableObject);
-        }
-    }
 }

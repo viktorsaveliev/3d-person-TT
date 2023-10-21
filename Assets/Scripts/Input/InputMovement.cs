@@ -7,7 +7,7 @@ public class InputMovement : MonoBehaviour
 {
     [SerializeField] private Transform _unitTransform;
 
-    private Unit _unit;
+    private UserCharacter _unit;
     private IInputMode _inputMode;
 
     private Camera _camera;
@@ -15,13 +15,14 @@ public class InputMovement : MonoBehaviour
 
     private float _currentSpeed;
     private bool _isAiming;
+    private bool _isGrounded;
     private bool _isSprinting;
 
     private readonly StringBus _stringBus = new();
+    private bool IsMoveActive => !Cursor.visible;
 
     private void Awake()
     {
-        _unit = GetComponent<Unit>();
         _currentSpeed = _unit.Data.RegularSpeed;
         _camera = Camera.main;
         _rigidbody = GetComponent<Rigidbody>();
@@ -33,6 +34,7 @@ public class InputMovement : MonoBehaviour
         _inputMode.OnMove += Move;
         _inputMode.OnAimed += Aim;
         _inputMode.OnSprint += Sprint;
+        _inputMode.OnJump += Jump;
     }
 
     private void OnDisable()
@@ -41,10 +43,13 @@ public class InputMovement : MonoBehaviour
         _inputMode.OnMove -= Move;
         _inputMode.OnAimed -= Aim;
         _inputMode.OnSprint -= Sprint;
+        _inputMode.OnJump -= Jump;
     }
 
     private void Move(Vector3 moveDirection)
     {
+        if (!IsMoveActive || !_isGrounded) return;
+
         if (moveDirection.x != 0 || moveDirection.z != 0)
         {
             Vector3 cameraForward = _camera.transform.forward;
@@ -67,25 +72,54 @@ public class InputMovement : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        int groundLayer = 3;
+        if (collision.gameObject.layer == groundLayer)
+        {
+            _isGrounded = true;
+        }
+    }
+
+    private void Jump()
+    {
+        if (!_isGrounded) return;
+
+        float jumpForce = 100f;
+        _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        _isGrounded = false;
+
+        _unit.Animator.SetTrigger(_stringBus.ANIM_JUMP);
+    }
+
     private void Rotate(float mouseX, float mouseY)
     {
-        if (!_isAiming) return;
+        if (!_isAiming || !_isGrounded) return;
 
         _unitTransform.rotation = GetCameraLookRotation();
     }
 
     private void Sprint(bool isSprinting)
     {
-        if (_isAiming) return;
+        if (_isAiming || !_isGrounded) return;
+
+        if (isSprinting)
+        {
+            if (_unit.IsReloading) return;
+            _currentSpeed = _unit.Data.SprintSpeed;
+        }
+        else
+        {
+            _currentSpeed = _unit.Data.RegularSpeed;
+        }
 
         _isSprinting = isSprinting;
-        _currentSpeed = isSprinting ? _unit.Data.SprintSpeed : _unit.Data.RegularSpeed;
         _unit.Animator.SetBool(_stringBus.ANIM_SPRINT, isSprinting);
     }
 
     private void Aim(bool isAiming)
     {
-        if (_isSprinting) return;
+        if (!IsMoveActive || !_isGrounded) return;
 
         _isAiming = isAiming;
         _currentSpeed = isAiming ? _unit.Data.AimSpeed : _unit.Data.RegularSpeed;
@@ -94,6 +128,11 @@ public class InputMovement : MonoBehaviour
         {
             Quaternion rotation = Quaternion.Euler(0, _unitTransform.rotation.eulerAngles.y, _unitTransform.rotation.eulerAngles.z);
             _unitTransform.DORotateQuaternion(rotation, 0.5f);
+
+            if (_isSprinting)
+            {
+                _currentSpeed = _unit.Data.SprintSpeed;
+            }
         }
 
         _unit.Animator.SetBool(_stringBus.ANIM_AIM_RIFLE, isAiming);
@@ -106,8 +145,9 @@ public class InputMovement : MonoBehaviour
     }
 
     [Inject]
-    public void Construct(IInputMode inputMode)
+    public void Construct(IInputMode inputMode, UserCharacter user)
     {
         _inputMode = inputMode;
+        _unit = user;
     }
 }

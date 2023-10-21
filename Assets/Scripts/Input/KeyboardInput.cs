@@ -11,6 +11,7 @@ public class KeyboardInput : IInputMode
     public event Action OnShot;
     public event Action OnOpenInventory;
     public event Action OnInteraction;
+    public event Action OnJump;
 
     public event Action<bool> OnAimed;
     public event Action<bool> OnSprint;
@@ -109,7 +110,12 @@ public class KeyboardInput : IInputMode
 
     private void CheckMovementInput()
     {
-        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 moveDirection = new(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         OnMove?.Invoke(moveDirection);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OnJump?.Invoke();
+        }
     }
 }

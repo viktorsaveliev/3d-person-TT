@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: UserCharacter
   m_EditorClassIdentifier: 
   _health: 100
+  _attackDamage: 20
   _regularSpeed: 2
   _aimSpeed: 1.5
   _sprintSpeed: 7

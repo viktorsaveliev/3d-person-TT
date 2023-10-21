@@ -1,9 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Unit), typeof(Animator))]
+[RequireComponent(typeof(Unit))]
 public class DamageEffect : MonoBehaviour, IUnitSystem
 {
     [SerializeField] private ParticleSystem _damageFX;
+    [SerializeField] private bool _isChangePositionFX;
 
     private Unit _unit;
     private HealthSystem _health;
@@ -15,16 +16,12 @@ public class DamageEffect : MonoBehaviour, IUnitSystem
         _health.OnTakedDamage += DamageFX;
     }
 
-    private void OnDisable()
-    {
-        _health.OnTakedDamage -= DamageFX;
-    }
-
     private void DamageFX(int damage)
     {
         if (_damageFX != null)
         {
-            _damageFX.transform.position = _health.LastHitPosition;
+            if(_isChangePositionFX) 
+                _damageFX.transform.position = _health.LastHitPosition;
             _damageFX.Play();
         }
     }

@@ -61,9 +61,12 @@ public class WalkingState : UnitState
     private void Move()
     {
         _isReachedPoint = false;
-        _navMeshAgent.isStopped = false;
 
-        _navMeshAgent.SetDestination(_targetPosition);
+        if (_navMeshAgent.isOnNavMesh && _navMeshAgent.isActiveAndEnabled)
+        {
+            _navMeshAgent.isStopped = false;
+            _navMeshAgent.SetDestination(_targetPosition);
+        }
 
         StringBus stringBus = new();
         Unit.Animator.SetFloat(stringBus.ANIM_MOVE, Unit.Data.RegularSpeed);

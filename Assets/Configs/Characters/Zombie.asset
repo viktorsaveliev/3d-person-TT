@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Zombie
   m_EditorClassIdentifier: 
   _health: 100
+  _attackDamage: 20
   _regularSpeed: 1
   _aimSpeed: 1
   _sprintSpeed: 4

@@ -7,10 +7,8 @@ public class UserCharacter : Unit
 
     private IInputMode _inputMode;
 
-    private void Awake()
-    {
-        Init();
-    }
+    private bool _isReloading;
+    public bool IsReloading => _isReloading;
 
     public override void Init()
     {
@@ -29,6 +27,8 @@ public class UserCharacter : Unit
 
     private void OnWeaponReloadStateChanged(bool isReloading)
     {
+        _isReloading = isReloading;
+
         StringBus stringBus = new();
         Animator.SetBool(stringBus.ANIM_RELOAD_RIFLE, isReloading);
     }

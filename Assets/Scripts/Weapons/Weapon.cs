@@ -17,6 +17,11 @@ public abstract class Weapon : Item
     public WeaponDataConfig WeaponData => _weaponConfig;
     public int CurrentAmmo => _currentAmmoCapacity;
 
+    private void Awake()
+    {
+        Init();
+    }
+
     public virtual void Init()
     {
         _raycastTarget = new(Camera.main);

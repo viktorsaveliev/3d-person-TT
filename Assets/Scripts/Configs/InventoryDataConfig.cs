@@ -16,18 +16,3 @@ public class InventoryDataConfig : ScriptableObject
     public Color RegularSlotColor => _regularSlotColor;
 }
 
-[CustomEditor(typeof(InventoryDataConfig))]
-public class InventoryDataConfigSaver : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        InventoryDataConfig scriptableObject = (InventoryDataConfig)target;
-        if (GUILayout.Button("Save"))
-        {
-            EditorUtility.SetDirty(scriptableObject);
-        }
-    }
-}
-

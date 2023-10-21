@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7e6dcdde5a6fa48bbd83077806e678, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  _damage: 50
+  _damage: 100
   _maxAmmoCapacity: 5
   _reloadTime: 2
   _delayBetweenShoots: 1
-  _fireRange: 20
+  _fireRange: 10

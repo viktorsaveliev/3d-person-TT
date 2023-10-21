@@ -12,6 +12,7 @@ public interface IInputMode
     public event Action OnShot;
     public event Action OnOpenInventory;
     public event Action OnInteraction;
+    public event Action OnJump;
 
     public event Action<bool> OnAimed;
     public event Action<bool> OnSprint;

@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour
     // ===
 
     private Vector3 _shakeOffset;
-    private readonly float _shakeSensitivity = 0.004f;
+    private readonly float _shakeSensitivity = 0.008f;
 
     private readonly float _sensitivity = 3;
     private readonly float _limitRotateX = 25;
