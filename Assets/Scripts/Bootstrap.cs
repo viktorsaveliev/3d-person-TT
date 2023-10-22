@@ -10,18 +10,6 @@ public class Bootstrap : MonoBehaviour
     private UnitSpawner _unitSpawner;
     private QuickSlotsController _quickSlots;
 
-    private void Awake()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        _unitSpawner.Init();
-        _userCharacter.Init();
-        _enemyCounter.Init();
-        _gameStats.Init();
-        _takeDamageView.Init();
-        _quickSlots.Init();
-    }
 
     [Inject]
     public void Construct(GameStatus gameStats, 

@@ -125,6 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemConfig: {fileID: 11400000, guid: 752351c2415b5ef4385733f3b7eb5752, type: 2}
   _weaponConfig: {fileID: 11400000, guid: 1790aae6bb2c5bb4cb6a90759b5682ff, type: 2}
+  _ammoType: 1
 --- !u!114 &2278547747052607132
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -35,7 +35,7 @@ public class Inventory
 
         if (freeSlot == null)
         {
-            new Exception("You don't have free slots");
+            Debug.Log("You don't have free slots");
             return false;
         }
 

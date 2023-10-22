@@ -357,7 +357,13 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: Speed
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: WithRifle
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8372146877327384661}
   m_Solo: 0
@@ -379,7 +385,13 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: WithRifle
+    m_EventTreshold: 0
+  - m_ConditionMode: 4
+    m_ConditionEvent: Speed
+    m_EventTreshold: 0.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2069608873489671763}
   m_Solo: 0
@@ -483,7 +495,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Jump
-  m_Speed: 0.8
+  m_Speed: 0.6
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -5625289150362689655}
@@ -1312,6 +1324,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: WithRifle
     m_EventTreshold: 0
+  - m_ConditionMode: 3
+    m_ConditionEvent: Speed
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 165782682204618487}
   m_Solo: 0
@@ -1380,10 +1395,10 @@ AnimatorStateMachine:
     m_Position: {x: 50, y: -200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2003579323077989618}
-    m_Position: {x: 1290, y: -200, z: 0}
+    m_Position: {x: 1080, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -600781077988147390}
-    m_Position: {x: 1560, y: -200, z: 0}
+    m_Position: {x: 1700, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 165782682204618487}
     m_Position: {x: 1030, y: -440, z: 0}

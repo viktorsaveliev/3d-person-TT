@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Zenject;
 
 public abstract class Weapon : Item
 {
@@ -7,31 +8,37 @@ public abstract class Weapon : Item
     public event Action OnShot;
 
     [SerializeField] private WeaponDataConfig _weaponConfig;
-    
+    [SerializeField] private AmmoData.AmmoType _ammoType;
+
     private int _currentAmmoCapacity;
     private float _currentDelayBetweenShoots;
-    private bool _isAvailable;
+    private bool _isCanShot;
 
     private RaycastTarget _raycastTarget;
+    private IAmmoCounter _ammoCounter;
 
     public WeaponDataConfig WeaponData => _weaponConfig;
-    public int CurrentAmmo => _currentAmmoCapacity;
+    public int CurrentAmmoCapacity => _currentAmmoCapacity;
+
+    public AmmoData.AmmoType AmmoType => _ammoType;
 
     private void Awake()
     {
         Init();
     }
 
-    public virtual void Init()
+    public override void Init()
     {
+        base.Init();
+
         _raycastTarget = new(Camera.main);
         _currentAmmoCapacity = _weaponConfig.MaxAmmo;
-        _isAvailable = true;
+        _isCanShot = true;
     }
 
     public bool TryShot()
     {
-        if (!_isAvailable
+        if (!_isCanShot
             || _currentDelayBetweenShoots >= Time.time)
         {
             return false;
@@ -44,7 +51,8 @@ public abstract class Weapon : Item
 
     public void StartReloading()
     {
-        _isAvailable = false;
+        int ammoCount = _ammoCounter.GetAmmoCount(_ammoType);
+        if (ammoCount <= 0) return;
 
         Timer timer = new(this);
         timer.StartTimer(_weaponConfig.ReloadTime);
@@ -80,14 +88,37 @@ public abstract class Weapon : Item
 
     private void OnAmmoEnded()
     {
+        _isCanShot = false;
         StartReloading();
     }
 
     private void Reload()
     {
-        _isAvailable = true;
-        _currentAmmoCapacity = _weaponConfig.MaxAmmo;
+        int ammoBeforeReload = _currentAmmoCapacity;
+        int ammoCount = _ammoCounter.GetAmmoCount(_ammoType);
+
+        if (ammoCount > _weaponConfig.MaxAmmo)
+        {
+            _currentAmmoCapacity = _weaponConfig.MaxAmmo;
+        }
+        else
+        {
+            _currentAmmoCapacity = ammoCount;
+        }
+
+        _ammoCounter.SpendAmmo(_ammoType, _currentAmmoCapacity - ammoBeforeReload);
+
+        if (_currentAmmoCapacity > 0)
+        {
+            _isCanShot = true;
+        }
 
         OnReloadStateChanged?.Invoke(false);
+    }
+
+    [Inject]
+    public void Construct(IAmmoCounter ammoCounter)
+    {
+        _ammoCounter = ammoCounter;
     }
 }

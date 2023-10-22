@@ -3,7 +3,7 @@ using UnityEngine;
 using Zenject;
 
 [RequireComponent(typeof(InventoryView))]
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviour, IAmmoCounter
 {
     [SerializeField] private InventoryDataConfig _config;
 
@@ -34,7 +34,7 @@ public class InventoryController : MonoBehaviour
         _inventory.OnSelectSlot += OnSelectSlot;
         _inventory.OnUnselectSlot += OnUnselectSlot;
 
-        _inputMode.OnOpenInventory += OnOpenInventory;
+        _inputMode.OnOpenInventory += OpenInventory;
         _itemInteraction.OnTryPickupItem += PickupItem;
     }
 
@@ -43,8 +43,80 @@ public class InventoryController : MonoBehaviour
         _inventory.OnSelectSlot -= OnSelectSlot;
         _inventory.OnUnselectSlot -= OnUnselectSlot;
 
-        _inputMode.OnOpenInventory -= OnOpenInventory;
+        _inputMode.OnOpenInventory -= OpenInventory;
         _itemInteraction.OnTryPickupItem -= PickupItem;
+    }
+
+    public int GetAmmoCount(AmmoData.AmmoType ammoType)
+    {
+        int ammoCount = 0;
+        foreach (var slot in _inventory.Slots)
+        {
+            if (slot.CurrentItem is Ammo ammo && ammo.AmmoType == ammoType)
+            {
+                ammoCount += ammo.CurrentAmount;
+            }
+        }
+        return ammoCount;
+    }
+
+    public void SpendAmmo(AmmoData.AmmoType ammoType, int ammoCount)
+    {
+        int remainingAmmoCount = ammoCount;
+
+        while (remainingAmmoCount > 0)
+        {
+            InventorySlot ammoSlot = GetAmmoSlotByType(ammoType);
+
+            if (ammoSlot == null)
+            {
+                break;
+            }
+
+            int spentAmmo = ammoSlot.CurrentItem.SpendAmountAndGetSpent(remainingAmmoCount);
+            remainingAmmoCount -= spentAmmo;
+
+            if (remainingAmmoCount > 0)
+            {
+                ResetSlot(ammoSlot);
+            }
+            else
+            {
+                if (ammoSlot.CurrentItem.CurrentAmount <= 0)
+                {
+                    ResetSlot(ammoSlot);
+                }
+
+                break;
+            }
+        }
+
+        if (remainingAmmoCount > 0)
+        {
+            throw new System.Exception("not enough ammo in inventory");
+        }
+    }
+
+    private void ResetSlot(InventorySlot slot)
+    {
+        slot.CurrentItem.Delete();
+        slot.SetItem(null);
+    }
+
+    private InventorySlot GetAmmoSlotByType(AmmoData.AmmoType ammoType)
+    {
+        InventorySlot ammoSlot = null;
+
+        foreach (var slot in _inventory.Slots)
+        {
+            if (slot.CurrentItem is Ammo ammo && ammo.AmmoType == ammoType)
+            {
+                ammoSlot = slot;
+                break;
+            }
+        }
+
+        return ammoSlot;
     }
 
     private void CreateSlots()
@@ -76,7 +148,7 @@ public class InventoryController : MonoBehaviour
         slot.ChangeColor(_config.RegularSlotColor);
     }
 
-    private void OnOpenInventory()
+    private void OpenInventory()
     {
         _view.Show();
     }
@@ -85,7 +157,7 @@ public class InventoryController : MonoBehaviour
     {
         if (_inventory.TryPickupItem(item))
         {
-            item.HideWithDelay();
+            item.HideAndExitTriggers();
         }
     }
 

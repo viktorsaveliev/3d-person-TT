@@ -9,6 +9,8 @@ public class PursuitState : UnitState
     private Unit _target;
     private float _attackDelay;
 
+    private bool _isAttack;
+
     public PursuitState(Unit unit) : base(unit)
     {
         _navMeshAgent = unit.GetComponent<NavMeshAgent>();
@@ -51,10 +53,15 @@ public class PursuitState : UnitState
             StringBus stringBus = new();
             Unit.Animator.SetBool(stringBus.ANIM_SPRINT, true);
         }
+
+        _isAttack = false;
     }
 
     private void TryAttack()
     {
+        if (_isAttack) return;
+
+        _isAttack = true;
         Stop();
 
         Unit.transform.LookAt(_target.transform);
@@ -65,6 +72,8 @@ public class PursuitState : UnitState
 
     public void AttackTarget()
     {
+        _isAttack = false;
+
         if (_attackDelay > Time.time) return;
 
         float distance = Vector3.Distance(_target.transform.position, Unit.transform.position);

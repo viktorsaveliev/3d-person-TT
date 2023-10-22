@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4971337722871373277}
   - component: {fileID: 7093384451608658104}
   m_Layer: 0
-  m_Name: Ammo
+  m_Name: AmmoRiffle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3bc447978908a26419039f0ab5289abd, type: 2}
+  - {fileID: 2100000, guid: 062a0c0c30b77214cb1591a05e1605f7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,3 +119,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemConfig: {fileID: 11400000, guid: 4c1853be1acff9b4d89a1a6b209d1358, type: 2}
+  _ammoType: 1

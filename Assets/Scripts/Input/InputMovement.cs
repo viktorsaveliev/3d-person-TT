@@ -23,6 +23,9 @@ public class InputMovement : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         _currentSpeed = _unit.Data.RegularSpeed;
         _camera = Camera.main;
         _rigidbody = GetComponent<Rigidbody>();
@@ -127,7 +130,8 @@ public class InputMovement : MonoBehaviour
         if (!isAiming)
         {
             Quaternion rotation = Quaternion.Euler(0, _unitTransform.rotation.eulerAngles.y, _unitTransform.rotation.eulerAngles.z);
-            _unitTransform.DORotateQuaternion(rotation, 0.5f);
+            //_unitTransform.DORotateQuaternion(rotation, 0.5f);
+            _unitTransform.rotation = rotation;
 
             if (_isSprinting)
             {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-public class GameBindings : MonoInstaller
+public class GameInstance : MonoInstaller
 {
     [SerializeField] private UserCharacter _userUnit;
 
@@ -19,6 +19,22 @@ public class GameBindings : MonoInstaller
     private readonly IInputMode _inputMode = new KeyboardInput();
     private readonly ISaveData _saveData = new PlayerPrefsSaver();
 
+    private GameStatus _gameStatus;
+    private QuickSlotsController _quickSlots;
+
+    private void Awake()
+    {
+        _gameStatus = Container.Resolve<GameStatus>();
+        _quickSlots = Container.Resolve<QuickSlotsController>();
+
+        _unitSpawner.Init();
+        _userUnit.Init();
+        _enemyCounter.Init();
+        _gameStatus.Init();
+        _takeDamageView.Init();
+        _quickSlots.Init();
+    }
+
     public override void InstallBindings()
     {
         Container.Bind<IInputMode>().FromInstance(_inputMode).AsSingle();
@@ -30,6 +46,7 @@ public class GameBindings : MonoInstaller
         Container.Bind<ItemInteraction>().FromInstance(_itemInteraction).AsSingle();
 
         Container.Bind<InventoryController>().FromInstance(_inventoryController).AsSingle();
+        Container.Bind<IAmmoCounter>().FromInstance(_inventoryController).AsSingle();
 
         Container.Bind<UnitFactory>().FromInstance(_unitFactory).AsSingle();
         Container.Bind<UnitSpawner>().FromInstance(_unitSpawner).AsSingle();

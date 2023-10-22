@@ -25,7 +25,7 @@ public class AISystem : IUnitSystem
         IState waitingState = _stateMachine.GetState<WaitingState>();
         _stateMachine.ChangeState(waitingState);
 
-        _unit.StartCoroutine(SecondTimer());
+        _unit.StartCoroutine(Timer());
     }
 
     public void Walk(Vector3 targetPosition)
@@ -36,7 +36,7 @@ public class AISystem : IUnitSystem
         WalkingState walk = (WalkingState)walkingState;
         walk.GoTo(targetPosition);
 
-        _unit.StartCoroutine(SecondTimer());
+        _unit.StartCoroutine(Timer());
     }
 
     public void Walk()
@@ -47,7 +47,7 @@ public class AISystem : IUnitSystem
         WalkingState walk = (WalkingState)walkingState;
         walk.GoToRandomPoint();
 
-        _unit.StartCoroutine(SecondTimer());
+        _unit.StartCoroutine(Timer());
     }
 
     public void Pursuit(Unit target)
@@ -58,7 +58,7 @@ public class AISystem : IUnitSystem
         PursuitState pursuit = (PursuitState)pursuitState;
         pursuit.Pursuit(target);
 
-        _unit.StartCoroutine(SecondTimer());
+        _unit.StartCoroutine(Timer());
     }
 
     public void AttackTarget()
@@ -93,9 +93,9 @@ public class AISystem : IUnitSystem
         };
     }
 
-    private IEnumerator SecondTimer()
+    private IEnumerator Timer()
     {
-        WaitForSeconds waitForSeconds = new(1f);
+        WaitForSeconds waitForSeconds = new(0.5f);
         yield return waitForSeconds;
 
         while (_stateMachine.CurrentState != null)
