@@ -83,7 +83,9 @@ public class PursuitState : UnitState
             if (targetHealth != null)
             {
                 targetHealth.TakeDamage(Unit.transform.position, Unit.Data.AttackDamage);
-                _attackDelay = Time.time + 2;
+
+                float delay = 1f;
+                _attackDelay = Time.time + delay;
             }
         }
     }
