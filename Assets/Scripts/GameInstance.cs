@@ -21,6 +21,7 @@ public class GameInstance : MonoInstaller
 
     private GameStatus _gameStatus;
     private QuickSlotsController _quickSlots;
+    private ITargetFinder _targetFinder;
 
     private void Awake()
     {
@@ -57,5 +58,8 @@ public class GameInstance : MonoInstaller
 
         Container.Bind<GameStatus>().FromNew().AsSingle();
         Container.Bind<QuickSlotsController>().FromNew().AsSingle();
+
+        _targetFinder = new RaycastTargetFinder(Camera.main);
+        Container.Bind<ITargetFinder>().FromInstance(_targetFinder).AsSingle();
     }
 }

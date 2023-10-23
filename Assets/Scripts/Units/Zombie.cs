@@ -1,10 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Zombie : Unit
 {
     private HealthSystem _health;
-    private Rigidbody _rigidbody;
 
     public override void Init()
     {
@@ -13,11 +11,11 @@ public class Zombie : Unit
         _health = GetSystem<HealthSystem>();
         _health.OnTakedDamage += OnTakedDamage;
 
-        _rigidbody = GetComponent<Rigidbody>();
-
         AISystem ai = new(this);
         ai.Init();
         AddSystem(ai);
+
+        OnInit?.Invoke();
     }
 
     private void OnTakedDamage(int damage)
@@ -32,11 +30,11 @@ public class Zombie : Unit
     protected override void OnDead()
     {
         base.OnDead();
-        _rigidbody.constraints = RigidbodyConstraints.None;
+        //_rigidbody.constraints = RigidbodyConstraints.None;
         GetSystem<AISystem>().CurrentState.Exit();
     }
 
-    private void AttackTarget() // Animation event
+    private void AttackTarget() // For animation event
     {
         GetSystem<AISystem>()?.AttackTarget();
     }

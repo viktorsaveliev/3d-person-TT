@@ -35,8 +35,10 @@ public class WalkingState : UnitState
         Stop();
 
         _isReachedPoint = true;
-        _navMeshAgent.isStopped = true;
-        _navMeshAgent.enabled = false;
+        if (_navMeshAgent.isOnNavMesh && _navMeshAgent.isActiveAndEnabled)
+        {
+            _navMeshAgent.enabled = false;
+        }
     }
 
     public void GoToRandomPoint()
@@ -75,7 +77,11 @@ public class WalkingState : UnitState
     private void Stop()
     {
         _isReachedPoint = true;
-        _navMeshAgent.isStopped = true;
+
+        if (_navMeshAgent.isOnNavMesh && _navMeshAgent.isActiveAndEnabled)
+        {
+            _navMeshAgent.isStopped = true;
+        }
 
         StringBus stringBus = new();
         Unit.Animator.SetFloat(stringBus.ANIM_MOVE, 0);

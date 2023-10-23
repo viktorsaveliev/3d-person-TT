@@ -1,16 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
+    public Action OnInit;
+
     [SerializeField] private Animator _animator;
     [SerializeField] private UnitDataConfig _config;
 
     private readonly List<IUnitSystem> _systems = new();
 
-    public UnitDataConfig Data => _config;
-    public Animator Animator => _animator;
+    public UnitDataConfig Data { get => _config; }
+    public Animator Animator { get => _animator; }
 
     public virtual void Init()
     {
