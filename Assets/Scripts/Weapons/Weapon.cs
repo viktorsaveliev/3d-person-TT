@@ -14,7 +14,7 @@ public abstract class Weapon : Item
     private float _currentDelayBetweenShoots;
     private bool _isCanShot;
 
-    private RaycastTarget _raycastTarget;
+    private ITargetFinder _targetFinder;
     private IAmmoCounter _ammoCounter;
 
     public WeaponDataConfig WeaponData => _weaponConfig;
@@ -31,7 +31,6 @@ public abstract class Weapon : Item
     {
         base.Init();
 
-        _raycastTarget = new(Camera.main);
         _currentAmmoCapacity = _weaponConfig.MaxAmmo;
         _isCanShot = true;
     }
@@ -72,16 +71,7 @@ public abstract class Weapon : Item
             _currentDelayBetweenShoots = Time.time + _weaponConfig.DelayBetweenShoots;
         }
 
-        Unit unit = _raycastTarget.GetTarget(out Vector3 hitPoint, _weaponConfig.FireRange);
-
-        if (unit != null)
-        {
-            HealthSystem health = unit.GetSystem<HealthSystem>();
-            if (health.Health > 0)
-            {
-                health.TakeDamage(hitPoint, _weaponConfig.Damage);
-            }
-        }
+        _targetFinder.Attack(_weaponConfig.FireRange, _weaponConfig.Damage);
 
         OnShot?.Invoke();
     }
@@ -117,8 +107,9 @@ public abstract class Weapon : Item
     }
 
     [Inject]
-    public void Construct(IAmmoCounter ammoCounter)
+    public void Construct(IAmmoCounter ammoCounter, ITargetFinder targetFinder)
     {
         _ammoCounter = ammoCounter;
+        _targetFinder = targetFinder;
     }
 }

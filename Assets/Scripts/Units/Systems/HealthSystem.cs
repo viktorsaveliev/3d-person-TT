@@ -42,6 +42,8 @@ public class HealthSystem : IUnitSystem
 
     public void TakeDamage(Vector3 hitPosition, int damage)
     {
+        if (_health <= 0) return;
+
         _lastHitPosition = hitPosition;
         _health -= damage;
 
