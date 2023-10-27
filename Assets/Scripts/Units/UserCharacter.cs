@@ -16,7 +16,7 @@ public class UserCharacter : Unit
 
         WeaponSystem weaponSystem = new(_weaponContainer);
         weaponSystem.OnEquipWeapon += OnEquipWeapon;
-        weaponSystem.OnHideWeapon += OnHideWeapon;
+        weaponSystem.OnUnequipWeapon += OnHideWeapon;
         weaponSystem.OnWeaponReloadStateChanged += OnWeaponReloadStateChanged;
 
         AddSystem(weaponSystem);
@@ -28,21 +28,17 @@ public class UserCharacter : Unit
     private void OnWeaponReloadStateChanged(bool isReloading)
     {
         _isReloading = isReloading;
-
-        StringBus stringBus = new();
-        Animator.SetBool(stringBus.ANIM_RELOAD_RIFLE, isReloading);
+        Animator.SetBool(AnimCache.ReloadRifleIndex, isReloading);
     }
 
     private void OnEquipWeapon()
     {
-        StringBus stringBus = new();
-        Animator.SetBool(stringBus.ANIM_WITH_RIFLE, true);
+        Animator.SetBool(AnimCache.WithRifleIndex, true);
     }
 
     private void OnHideWeapon()
     {
-        StringBus stringBus = new();
-        Animator.SetBool(stringBus.ANIM_WITH_RIFLE, false);
+        Animator.SetBool(AnimCache.WithRifleIndex, false);
     }
 
     [Inject]

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7e6dcdde5a6fa48bbd83077806e678, type: 3}
   m_Name: M4A1
   m_EditorClassIdentifier: 
-  _name: M4A1
   _damage: 20
   _maxAmmoCapacity: 30
   _reloadTime: 2
   _delayBetweenShoots: 0.2
   _fireRange: 100
+  _spreadRange: 1

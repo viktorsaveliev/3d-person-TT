@@ -15,18 +15,21 @@ public class GameInstance : MonoInstaller
     [SerializeField] private UnitSpawner _unitSpawner;
 
     [SerializeField] private EnemyCounter _enemyCounter;
+    [SerializeField] private WeaponInfoView _weaponInfoView;
+    [SerializeField] private CrosshairView _crosshairView;
 
     private readonly IInputMode _inputMode = new KeyboardInput();
     private readonly ISaveData _saveData = new PlayerPrefsSaver();
+    private readonly AnimationCache _animCache = new();
 
+    private ItemsController _itemsController;
     private GameStatus _gameStatus;
     private QuickSlotsController _quickSlots;
-    private ITargetFinder _targetFinder;
+    private WeaponController _weaponController;
 
     private void Awake()
     {
-        _gameStatus = Container.Resolve<GameStatus>();
-        _quickSlots = Container.Resolve<QuickSlotsController>();
+        Resolves();
 
         _unitSpawner.Init();
         _userUnit.Init();
@@ -34,6 +37,11 @@ public class GameInstance : MonoInstaller
         _gameStatus.Init();
         _takeDamageView.Init();
         _quickSlots.Init();
+        _inventoryController.Init();
+        _weaponInfoView.Init();
+        _crosshairView.Init();
+        _itemsController.Init();
+        _weaponController.Init();
     }
 
     public override void InstallBindings()
@@ -58,8 +66,17 @@ public class GameInstance : MonoInstaller
 
         Container.Bind<GameStatus>().FromNew().AsSingle();
         Container.Bind<QuickSlotsController>().FromNew().AsSingle();
+        Container.Bind<ItemsController>().FromNew().AsSingle();
+        Container.Bind<WeaponController>().FromNew().AsSingle();
+        
+        Container.Bind<AnimationCache>().FromInstance(_animCache).AsSingle();
+    }
 
-        _targetFinder = new RaycastTargetFinder(Camera.main);
-        Container.Bind<ITargetFinder>().FromInstance(_targetFinder).AsSingle();
+    private void Resolves()
+    {
+        _itemsController = Container.Resolve<ItemsController>();
+        _gameStatus = Container.Resolve<GameStatus>();
+        _quickSlots = Container.Resolve<QuickSlotsController>();
+        _weaponController = Container.Resolve<WeaponController>();
     }
 }

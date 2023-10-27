@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 [RequireComponent(typeof(InventoryView))]
@@ -11,6 +11,7 @@ public class InventoryController : MonoBehaviour, IAmmoCounter
     [SerializeField] private Transform _quickAccessSlotsContainer;
 
     [SerializeField] private InventorySlot _slotPrefab;
+    [SerializeField] private Button _dropButton;
 
     private Inventory _inventory;
     private InventoryView _view;
@@ -18,9 +19,9 @@ public class InventoryController : MonoBehaviour, IAmmoCounter
     private IInputMode _inputMode;
     private ItemInteraction _itemInteraction;
 
-    public IReadOnlyList<InventorySlot> Slots => _inventory.Slots;
+    public Inventory Inventory => _inventory;
 
-    private void Awake()
+    public void Init()
     {
         _inventory = new(_config.SlotsCapacity);
         _view = GetComponent<InventoryView>();
@@ -36,6 +37,8 @@ public class InventoryController : MonoBehaviour, IAmmoCounter
 
         _inputMode.OnOpenInventory += OpenInventory;
         _itemInteraction.OnTryPickupItem += PickupItem;
+
+        _dropButton.onClick.AddListener(DropItem);
     }
 
     private void OnDisable()
@@ -45,6 +48,8 @@ public class InventoryController : MonoBehaviour, IAmmoCounter
 
         _inputMode.OnOpenInventory -= OpenInventory;
         _itemInteraction.OnTryPickupItem -= PickupItem;
+
+        _dropButton.onClick.RemoveListener(DropItem);
     }
 
     public int GetAmmoCount(AmmoData.AmmoType ammoType)
@@ -96,6 +101,8 @@ public class InventoryController : MonoBehaviour, IAmmoCounter
             throw new System.Exception("not enough ammo in inventory");
         }
     }
+
+    private void DropItem() => _inventory.DropItem(_inventory.SelectedSlot);
 
     private void ResetSlot(InventorySlot slot)
     {

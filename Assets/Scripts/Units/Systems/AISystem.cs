@@ -61,6 +61,19 @@ public class AISystem : IUnitSystem
         _unit.StartCoroutine(Timer());
     }
 
+    public void Run(Vector3 direction)
+    {
+        if (CurrentState is PursuitState) return;
+
+        IState runState = _stateMachine.GetState<RunState>();
+        _stateMachine.ChangeState(runState);
+
+        RunState run = (RunState)runState;
+        run.Run(direction);
+
+        _unit.StartCoroutine(Timer());
+    }
+
     public void AttackTarget()
     {
         IState pursuitState = _stateMachine.GetState<PursuitState>();
@@ -87,9 +100,10 @@ public class AISystem : IUnitSystem
     {
         _stateMachine.StateMap = new Dictionary<Type, IState>
         {
-            [typeof(WalkingState)] = new WalkingState(_unit),
-            [typeof(WaitingState)] = new WaitingState(_unit),
-            [typeof(PursuitState)] = new PursuitState(_unit)
+            [typeof(WalkingState)]  = new WalkingState(_unit),
+            [typeof(WaitingState)]  = new WaitingState(_unit),
+            [typeof(PursuitState)]  = new PursuitState(_unit),
+            [typeof(RunState)]      = new RunState(_unit)
         };
     }
 

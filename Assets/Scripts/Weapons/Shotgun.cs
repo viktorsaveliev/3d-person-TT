@@ -1,8 +1,11 @@
 
+using UnityEngine;
+
 public class Shotgun : Weapon
 {
-    public override void Use()
+    public override void Init()
     {
-        throw new System.NotImplementedException();
+        base.Init();
+        TargetFinder = new MultiplieTargetFinder(Camera.main);
     }
 }

@@ -16,3 +16,4 @@ MonoBehaviour:
   _name: Shotgun
   _description: Shotgun
   _amount: 1
+  _maxAmount: 1

@@ -17,7 +17,7 @@ public class QuickSlotsController
 
     private void OnSelectSlot(int index)
     {
-        Item item = _inventoryController.Slots[index - 1].CurrentItem;
+        Item item = _inventoryController.Inventory.Slots[index - 1].CurrentItem;
 
         if (item != null && item is Weapon weapon)
         {

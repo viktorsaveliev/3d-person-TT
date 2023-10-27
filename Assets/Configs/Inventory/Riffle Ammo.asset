@@ -16,3 +16,4 @@ MonoBehaviour:
   _name: Riffle Ammo
   _description: Bullets for rifles
   _amount: 30
+  _maxAmount: 90

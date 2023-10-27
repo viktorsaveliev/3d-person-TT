@@ -16,3 +16,4 @@ MonoBehaviour:
   _name: AK74
   _description: Just AK74
   _amount: 1
+  _maxAmount: 1

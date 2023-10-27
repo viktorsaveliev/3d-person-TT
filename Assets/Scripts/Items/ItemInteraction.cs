@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -34,7 +35,7 @@ public class ItemInteraction : MonoBehaviour
 
     private void OnItemLost(Item item)
     {
-        _currentItem = null;
+        _currentItem = _itemDetector.NearestItems.FirstOrDefault();
     }
 
     private void Action()

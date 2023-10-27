@@ -7,8 +7,7 @@ public class WaitingState : UnitState
 
     public override void Enter()
     {
-        StringBus stringBus = new();
-        Unit.Animator.SetFloat(stringBus.ANIM_MOVE, 0);
+        Unit.Animator.SetFloat(Unit.AnimCache.MoveIndex, 0);
     }
 
     public override void Update()

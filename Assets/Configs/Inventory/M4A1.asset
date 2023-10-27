@@ -16,3 +16,4 @@ MonoBehaviour:
   _name: M4A1
   _description: A powerful rifle with a low rate of fire
   _amount: 1
+  _maxAmount: 1

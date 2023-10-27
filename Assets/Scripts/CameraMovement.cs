@@ -28,7 +28,7 @@ public class CameraMovement : MonoBehaviour
 
     private bool _isAiming;
 
-    private bool IsRotateActive => !Cursor.visible;
+    private bool IsRotateActive => Cursor.lockState == CursorLockMode.Locked;
 
     private void Awake()
     {

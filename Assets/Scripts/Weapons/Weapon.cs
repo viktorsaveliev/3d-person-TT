@@ -10,11 +10,12 @@ public abstract class Weapon : Item
     [SerializeField] private WeaponDataConfig _weaponConfig;
     [SerializeField] private AmmoData.AmmoType _ammoType;
 
+    protected TargetFinder TargetFinder;
+    
     private int _currentAmmoCapacity;
     private float _currentDelayBetweenShoots;
     private bool _isCanShot;
 
-    private ITargetFinder _targetFinder;
     private IAmmoCounter _ammoCounter;
 
     public WeaponDataConfig WeaponData => _weaponConfig;
@@ -71,7 +72,7 @@ public abstract class Weapon : Item
             _currentDelayBetweenShoots = Time.time + _weaponConfig.DelayBetweenShoots;
         }
 
-        _targetFinder.Attack(_weaponConfig.FireRange, _weaponConfig.Damage);
+        TargetFinder.Attack(_weaponConfig);
 
         OnShot?.Invoke();
     }
@@ -87,13 +88,13 @@ public abstract class Weapon : Item
         int ammoBeforeReload = _currentAmmoCapacity;
         int ammoCount = _ammoCounter.GetAmmoCount(_ammoType);
 
-        if (ammoCount > _weaponConfig.MaxAmmo)
+        if (ammoCount > _weaponConfig.MaxAmmo || ammoCount + _currentAmmoCapacity >= _weaponConfig.MaxAmmo)
         {
             _currentAmmoCapacity = _weaponConfig.MaxAmmo;
         }
         else
         {
-            _currentAmmoCapacity = ammoCount;
+            _currentAmmoCapacity += ammoCount;
         }
 
         _ammoCounter.SpendAmmo(_ammoType, _currentAmmoCapacity - ammoBeforeReload);
@@ -107,9 +108,8 @@ public abstract class Weapon : Item
     }
 
     [Inject]
-    public void Construct(IAmmoCounter ammoCounter, ITargetFinder targetFinder)
+    public void Construct(IAmmoCounter ammoCounter)
     {
         _ammoCounter = ammoCounter;
-        _targetFinder = targetFinder;
     }
 }

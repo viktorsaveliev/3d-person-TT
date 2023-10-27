@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class UnitFactory : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class UnitFactory : MonoBehaviour
         Zombie
     }
 
+    [Inject] private readonly DiContainer _diContainer;
+
     public Unit CreateUnit(UnitType unitType)
     {
-        Unit unit = Instantiate(_unit, _container);
+        Unit unit = _diContainer.InstantiatePrefab(_unit, _container).GetComponent<Unit>();
         unit.Init();
         _units.Add(unit);
 

@@ -22,15 +22,13 @@ public class Zombie : Unit
     {
         if (_health.Health > 0)
         {
-            StringBus stringBus = new();
-            Animator.SetTrigger(stringBus.ANIM_REACTION_HIT);
+            Animator.SetTrigger(AnimCache.HitReactionIndex);
         }
     }
 
     protected override void OnDead()
     {
         base.OnDead();
-        //_rigidbody.constraints = RigidbodyConstraints.None;
         GetSystem<AISystem>().CurrentState.Exit();
     }
 

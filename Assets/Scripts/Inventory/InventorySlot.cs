@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class InventorySlot : MonoBehaviour
 
     [SerializeField] private Image _icon;
     [SerializeField] private Sprite _defaultIcon;
+    [SerializeField] private TMP_Text _amountText;
 
     private Button _slotButton;
     private Item _item;
@@ -33,13 +35,13 @@ public class InventorySlot : MonoBehaviour
     public void SetItem(Item item)
     {
         _item = item;
-        UpdateIcon();
+        UpdateData();
     }
 
     public void DeleteItem()
     {
         _item = null;
-        UpdateIcon();
+        UpdateData();
     }
 
     public void ChangeColor(Color color)
@@ -47,14 +49,16 @@ public class InventorySlot : MonoBehaviour
         _slotButton.image.color = color;
     }
 
-    private void UpdateIcon()
+    public void UpdateData()
     {
         if (_item == null)
         {
             _icon.sprite = _defaultIcon;
+            _amountText.text = string.Empty;
         }
         else
         {
+            _amountText.text = $"{(_item.CurrentAmount > 1 ? _item.CurrentAmount : string.Empty)}";
             _icon.sprite = _item.ItemData.Icon;
         }
     }

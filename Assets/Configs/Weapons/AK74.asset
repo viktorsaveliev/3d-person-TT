@@ -17,3 +17,4 @@ MonoBehaviour:
   _reloadTime: 2
   _delayBetweenShoots: 0.08
   _fireRange: 100
+  _spreadRange: 1

@@ -4,7 +4,7 @@ using UnityEngine;
 public class WeaponSystem : IUnitSystem
 {
     public event Action OnEquipWeapon;
-    public event Action OnHideWeapon;
+    public event Action OnUnequipWeapon;
     public event Action<bool> OnWeaponReloadStateChanged;
 
     private readonly Transform _weaponContainer;
@@ -34,21 +34,22 @@ public class WeaponSystem : IUnitSystem
         _currentWeapon.transform.parent = _weaponContainer;
         _currentWeapon.transform.localPosition = _currentWeapon.transform.localEulerAngles = Vector3.zero;
 
-        _currentWeapon.Show();
+        _currentWeapon.Show(true);
 
         OnEquipWeapon?.Invoke();
     }
 
-    public void HideWeapon()
+    public void UnequipWeapon(bool hide)
     {
         if (_currentWeapon != null)
         {
-            _currentWeapon.Hide();
+            if(hide) _currentWeapon.Hide();
+
             _currentWeapon.OnReloadStateChanged -= OnRealod;
             _currentWeapon = null;
         }
 
-        OnHideWeapon?.Invoke();
+        OnUnequipWeapon?.Invoke();
     }
 
     public void Shot()

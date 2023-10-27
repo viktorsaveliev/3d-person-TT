@@ -24,6 +24,8 @@ public class PursuitState : UnitState
 
     public override void Update()
     {
+        if (_target == null || !_navMeshAgent.isOnNavMesh || !_navMeshAgent.isActiveAndEnabled) return;
+
         float distance = Vector3.Distance(_target.transform.position, Unit.transform.position);
         if (distance <= _attackDistance)
         {
@@ -50,8 +52,7 @@ public class PursuitState : UnitState
             _navMeshAgent.isStopped = false;
             _navMeshAgent.SetDestination(_target.transform.position);
 
-            StringBus stringBus = new();
-            Unit.Animator.SetBool(stringBus.ANIM_SPRINT, true);
+            Unit.Animator.SetBool(Unit.AnimCache.SprintIndex, true);
         }
 
         _isAttack = false;
@@ -65,9 +66,7 @@ public class PursuitState : UnitState
         Stop();
 
         Unit.transform.LookAt(_target.transform);
-
-        StringBus stringBus = new();
-        Unit.Animator.SetTrigger(stringBus.ANIM_ATTACK_HANDS);
+        Unit.Animator.SetTrigger(Unit.AnimCache.ZombieAttackIndex);
     }
 
     public void AttackTarget()
@@ -97,7 +96,6 @@ public class PursuitState : UnitState
             _navMeshAgent.isStopped = true;
         }
 
-        StringBus stringBus = new();
-        Unit.Animator.SetBool(stringBus.ANIM_SPRINT, false);
+        Unit.Animator.SetBool(Unit.AnimCache.SprintIndex, false);
     }
 }

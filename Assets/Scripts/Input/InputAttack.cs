@@ -1,8 +1,12 @@
 
+using UnityEngine;
+
 public class InputAttack
 {
     private readonly IInputMode _inputMode;
     private readonly WeaponSystem _weaponSystem;
+
+    private bool IsCanAttack => Cursor.lockState == CursorLockMode.Locked;
 
     public InputAttack(IInputMode inputMode, WeaponSystem weaponSystem)
     {
@@ -18,7 +22,7 @@ public class InputAttack
 
     private void OnShot()
     {
-        if (_weaponSystem == null || _weaponSystem.CurrentWeapon == null) return;
+        if (!IsCanAttack || _weaponSystem == null || _weaponSystem.CurrentWeapon == null) return;
         _weaponSystem.Shot();
     }
 

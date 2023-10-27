@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 public abstract class Unit : MonoBehaviour
 {
@@ -12,8 +13,11 @@ public abstract class Unit : MonoBehaviour
 
     private readonly List<IUnitSystem> _systems = new();
 
+    private AnimationCache _animCache;
+
     public UnitDataConfig Data { get => _config; }
     public Animator Animator { get => _animator; }
+    public AnimationCache AnimCache => _animCache;
 
     public virtual void Init()
     {
@@ -46,7 +50,12 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void OnDead()
     {
-        StringBus stringBus = new();
-        _animator.SetTrigger(stringBus.ANIM_DEATH_2);
+        _animator.SetTrigger(_animCache.DeathIndex);
+    }
+
+    [Inject]
+    public void Construct(AnimationCache animCache)
+    {
+        _animCache = animCache;
     }
 }

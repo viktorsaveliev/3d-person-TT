@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba0d1116b202c347b63855647d2ef8c, type: 3}
   m_Name: Shotgun Ammo
   m_EditorClassIdentifier: 
-  _icon: {fileID: 21300000, guid: 073b57f75e664d541ad29d21da037d6e, type: 3}
+  _icon: {fileID: 21300000, guid: 1b5528f0353b4b34eb09fc201c259930, type: 3}
   _name: Shotgun Ammo
   _description: Bullets for shotgun
   _amount: 5
+  _maxAmount: 20

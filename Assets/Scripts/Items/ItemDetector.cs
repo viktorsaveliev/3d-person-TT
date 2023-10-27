@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -10,14 +12,20 @@ public class ItemDetector : MonoBehaviour
     [SerializeField] private GameObject _detectUI;
     [SerializeField] private TMP_Text _itemName;
 
+    private readonly HashSet<Item> _nearestItems = new();
+    public IReadOnlyCollection<Item> NearestItems => _nearestItems;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Item item))
         {
-            UpdateItemData(item);
-            ShowUI();
+            if (_nearestItems.Add(item))
+            {
+                UpdateItemData(item);
+                ShowUI();
 
-            OnItemDetected?.Invoke(item);
+                OnItemDetected?.Invoke(item);
+            }
         }
     }
 
@@ -25,8 +33,20 @@ public class ItemDetector : MonoBehaviour
     {
         if (other.TryGetComponent(out Item item))
         {
-            HideUI();
-            OnItemLost?.Invoke(item);
+            if (_nearestItems.Remove(item))
+            {
+                Item anotherItem = _nearestItems.FirstOrDefault();
+                if (anotherItem != null)
+                {
+                    UpdateItemData(anotherItem);
+                }
+                else
+                {
+                    HideUI();
+                }
+
+                OnItemLost?.Invoke(item);
+            }
         }
     }
 

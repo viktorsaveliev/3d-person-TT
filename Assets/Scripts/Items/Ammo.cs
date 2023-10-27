@@ -10,11 +10,6 @@ public class Ammo : Item
     {
         Init();
     }
-
-    public override void Use()
-    {
-        throw new System.NotImplementedException();
-    }
 }
 
 public class AmmoData

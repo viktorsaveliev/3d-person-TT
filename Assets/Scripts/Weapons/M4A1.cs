@@ -1,8 +1,10 @@
+using UnityEngine;
 
 public class M4A1 : Weapon
 {
-    public override void Use()
+    public override void Init()
     {
-        throw new System.NotImplementedException();
+        base.Init();
+        TargetFinder = new BaseRaycastTargetFinder(Camera.main);
     }
 }

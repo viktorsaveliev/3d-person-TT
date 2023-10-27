@@ -70,8 +70,7 @@ public class WalkingState : UnitState
             _navMeshAgent.SetDestination(_targetPosition);
         }
 
-        StringBus stringBus = new();
-        Unit.Animator.SetFloat(stringBus.ANIM_MOVE, Unit.Data.RegularSpeed);
+        Unit.Animator.SetFloat(Unit.AnimCache.MoveIndex, Unit.Data.RegularSpeed);
     }
 
     private void Stop()
@@ -83,7 +82,6 @@ public class WalkingState : UnitState
             _navMeshAgent.isStopped = true;
         }
 
-        StringBus stringBus = new();
-        Unit.Animator.SetFloat(stringBus.ANIM_MOVE, 0);
+        Unit.Animator.SetFloat(Unit.AnimCache.MoveIndex, 0);
     }
 }
